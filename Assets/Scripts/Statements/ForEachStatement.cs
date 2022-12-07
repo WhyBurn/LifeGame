@@ -5,14 +5,14 @@ using UnityEngine;
 public class ForEachStatement : Statement
 {
     private string[] possibleTags;
-    private string entityTag;
+    private int entityTag;
     private string variableName;
     private Statement loopStatement;
 
     public ForEachStatement(string[] tags, string variable, Statement loop)
     {
         possibleTags = tags;
-        entityTag = tags[0];
+        entityTag = 0;
         variableName = variable;
         loopStatement = loop;
     }
@@ -24,6 +24,29 @@ public class ForEachStatement : Statement
 
     public override void Run()
     {
-        GameControllerObject.GetGCO().RunForEachLoop(entityTag, variableName, loopStatement);
+        GameControllerObject.GetGCO().RunForEachLoop(possibleTags[entityTag], variableName, loopStatement);
+    }
+
+    public override GameObject[] GetCodeLineObjects()
+    {
+        GameObject[] loopObjects = loopStatement.GetCodeLineObjects();
+        GameObject[] forEachObject = new GameObject[loopObjects.Length + 1];
+        forEachObject[0] = GameObject.Instantiate(Resources.Load<GameObject>("Foreach"));
+        forEachObject[0].GetComponent<ForEachHandler>().SetupTagDropdown(possibleTags, entityTag, SetTag);
+        forEachObject[0].GetComponent<ForEachHandler>().SetupText(variableName);
+        for(int i = 0; i < loopObjects.Length; ++i)
+        {
+            forEachObject[i + 1] = loopObjects[i];
+        }
+        return (forEachObject);
+    }
+
+    public void SetTag(int index)
+    {
+        if(index < 0 || index >= possibleTags.Length)
+        {
+            return;
+        }
+        entityTag = index;
     }
 }

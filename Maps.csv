@@ -1,2 +1,6 @@
 ﻿name,x,y
 start,10,10
+fireIntro,10,10
+passFire,5,5
+overTrees,5,5
+forestTest,10,10

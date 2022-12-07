@@ -1,0 +1,10 @@
+﻿Type,x,y,tag,model
+Player,1,0,Player,Player
+Computer,1,4,Computer,6;7;8
+Entity,2,0,Tree,Tree
+Entity,2,1,Tree,Tree
+Entity,2,2,Tree,Tree
+Entity,2,3,Tree,Tree
+Entity,2,4,Tree,Tree
+Entity,0,2,Fire,Fire
+Entity,4,4,Star,Star

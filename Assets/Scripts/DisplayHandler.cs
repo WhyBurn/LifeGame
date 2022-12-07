@@ -7,12 +7,17 @@ public class DisplayHandler : MonoBehaviour
     private List<GameObject> models;
     [SerializeField]
     private GameObject defaultSpawnObject;
+    [SerializeField]
+    private GameObject codePanel;
+    [SerializeField]
+    private Transform codeContent;
 
     // Start is called before the first frame update
     void Start()
     {
         models = new List<GameObject>();
         GameControllerObject.GetGCO().SetDisplayerReference(this);
+        codePanel.SetActive(false);
     }
 
     public void ClearModels()
@@ -34,5 +39,23 @@ public class DisplayHandler : MonoBehaviour
             model.GetComponent<EntityObject>().SetEntity(entities[i]);
             models.Add(model);
         }
+    }
+
+    public void ClearCodeContent()
+    {
+        for (int i = 0; i < codeContent.childCount; ++i)
+        {
+            Destroy(codeContent.GetChild(i).gameObject);                
+        }
+    }
+
+    public void DisplayCode(GameObject[] lines)
+    {
+        ClearCodeContent();
+        for(int i = 0; i < lines.Length; ++i)
+        {
+            lines[i].transform.SetParent(codeContent);
+        }
+        codePanel.SetActive(true);
     }
 }

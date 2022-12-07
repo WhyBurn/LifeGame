@@ -72,23 +72,67 @@ public class GameControllerObject
 
     public void PlayerDirectionInput(Data.Direction direction)
     {
+        bool didMove = false;
         for(int i = 0; i < entities.Length; ++i)
         {
             if(entities[i].Tag == "Player")
             {
-                TryMove(entities[i], direction);
+                if(TryMove(entities[i], direction))
+                {
+                    didMove = true;
+                }
+            }
+        }
+        if(didMove)
+        {
+            for(int i = 0; i < entities.Length; ++i)
+            {
+                if(entities[i].Tag == "Computer")
+                {
+                    if(entities[i] is Computer c)
+                    {
+                        c.RunRules(Rule.RuleType.onMove);
+                    }
+                }
             }
         }
     }
 
     public void PlayerInteractInput()
     {
-
+        for (int i = 0; i < entities.Length; ++i)
+        {
+            if (entities[i].Tag == "Computer")
+            {
+                if (entities[i] is Computer c)
+                {
+                    c.RunRules(Rule.RuleType.onInteract);
+                }
+            }
+        }
+        for(int i = 0; i < entities.Length; ++i)
+        {
+            if(entities[i].Tag == "Player")
+            {
+                for(int j = 0; j < entities.Length; ++j)
+                {
+                    if(entities[j].Tag == "Computer" && entities[i].Position == entities[j].Position)
+                    {
+                        DisplayCode(entities[j] as Computer);
+                    }
+                }
+            }
+        }
     }
 
-    public void TryMove(GameEntity entity, Data.Direction direction)
+    public void DisplayCode(Computer c)
     {
-        entity.Facing = direction;
+        GameObject[] codeObjects = c.GetCodeLines();
+        displayer.DisplayCode(codeObjects);
+    }
+
+    public bool TryMove(GameEntity entity, Data.Direction direction)
+    {
         Vector2Int pos = entity.Position;
         if(direction == Data.Direction.up)
         {
@@ -108,12 +152,14 @@ public class GameControllerObject
         }
         if(pos.x < 0 || pos.y < 0 || pos.x >= currentMap.X || pos.y >= currentMap.Y)
         {
-            return;
+            return (false);
         }
+        entity.Facing = direction;
         entity.Position = pos;
+        return (true);
     }
 
-    public void TryShift(GameEntity entity, Data.Direction direction)
+    public bool TryShift(GameEntity entity, Data.Direction direction)
     {
         Vector2Int pos = entity.Position;
         if (direction == Data.Direction.up)
@@ -134,9 +180,10 @@ public class GameControllerObject
         }
         if (pos.x < 0 || pos.y < 0 || pos.x >= currentMap.X || pos.y >= currentMap.Y)
         {
-            return;
+            return(false);
         }
         entity.Position = pos;
+        return (true);
     }
 
     public void RunForEachLoop(string tag, string variable, Statement loop)
@@ -155,12 +202,12 @@ public class GameControllerObject
     {
         bool anyLeft = false;
         string leftTag = left;
-        if (left.Substring(0, 3) == "any")
+        if (left.Length > 3 && left.Substring(0, 3) == "any")
         {
             leftTag = left.Substring(3);
             anyLeft = true;
         }
-        if(right.Substring(0, 3) == "any")
+        if(right.Length > 3 && right.Substring(0, 3) == "any")
         {
             string rightTag = right.Substring(3);
             foreach(GameEntity entity in entities)
@@ -224,7 +271,7 @@ public class GameControllerObject
 
     public void MoveEntity(string entityTag, string directionString)
     {
-        if(entityTag.Substring(0, 4) == "each")
+        if(entityTag.Length > 4 && entityTag.Substring(0, 4) == "each")
         {
             string tag = entityTag.Substring(4);
             foreach(GameEntity entity in entities)
@@ -294,7 +341,7 @@ public class GameControllerObject
 
     public void ShiftEntity(string entityTag, string directionString)
     {
-        if (entityTag.Substring(0, 4) == "each")
+        if (entityTag.Length > 4 && entityTag.Substring(0, 4) == "each")
         {
             string tag = entityTag.Substring(4);
             foreach (GameEntity entity in entities)
@@ -364,7 +411,7 @@ public class GameControllerObject
 
     public void PlaceAt(string entityTag, int x, int y)
     {
-        if (entityTag.Substring(0, 4) == "each")
+        if (entityTag.Length > 4 && entityTag.Substring(0, 4) == "each")
         {
             string tag = entityTag.Substring(4);
             foreach (GameEntity entity in entities)

@@ -1,0 +1,9 @@
+﻿Type,x,y,tag,model
+Player,0,0,Player,Player
+Computer,0,4,Computer,4;5
+Entity,2,0,Fire,Fire
+Entity,2,1,Fire,Fire
+Entity,2,2,Fire,Fire
+Entity,2,3,Fire,Fire
+Entity,2,4,Fire,Fire
+Entity,4,2,Star,Star

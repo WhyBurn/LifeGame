@@ -1,20 +1,21 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class SameSpaceStatement : BoolStatement
 {
     private string[] possibleLeftTags;
     private string[] possibleRightTags;
-    private string leftTag;
-    private string rightTag;
+    private int leftTag;
+    private int rightTag;
 
     public SameSpaceStatement(string[] left, string[] right)
     {
         possibleLeftTags = left;
         possibleRightTags = right;
-        leftTag = left[0];
-        rightTag = right[0];
+        leftTag = 0;
+        rightTag = 0;
     }
 
     public override BoolStatement GetCopy()
@@ -24,6 +25,31 @@ public class SameSpaceStatement : BoolStatement
 
     public override bool IsTrue()
     {
-        return (GameControllerObject.GetGCO().SameSpace(leftTag, rightTag));
+        return (GameControllerObject.GetGCO().SameSpace(possibleLeftTags[leftTag], possibleRightTags[rightTag]));
+    }
+
+    public override GameObject GetBoolStatementObjects()
+    {
+        GameObject sameSpaceObject = GameObject.Instantiate(Resources.Load<GameObject>("SameSpace"));
+        sameSpaceObject.GetComponent<SameSpaceHandler>().SetupLeftDropdown(possibleLeftTags, leftTag, SetLeft);
+        sameSpaceObject.GetComponent<SameSpaceHandler>().SetupRightDropdown(possibleRightTags, rightTag, SetRight);
+        return (sameSpaceObject);
+    }
+
+    public void SetLeft(int index)
+    {
+        if(index < 0 || index >= possibleLeftTags.Length)
+        {
+            return;
+        }
+        leftTag = index;
+    }
+    public void SetRight(int index)
+    {
+        if (index < 0 || index >= possibleRightTags.Length)
+        {
+            return;
+        }
+        rightTag = index;
     }
 }

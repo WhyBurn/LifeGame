@@ -1,0 +1,6 @@
+﻿Type,,
+SameSpace,A,anyTree
+SameSpace,anyPlayer,anyStar
+SameSpace,anyPlayer,anyFire
+SameSpace,anyPlayer,anyFire;anyTree
+SameSpace,A,anyTree;AnyStar

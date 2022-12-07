@@ -16,6 +16,7 @@ public class EntityObject : MonoBehaviour
     {
         entity = e;
         e.SetDisplayObject(this);
+        targetPosition = new Vector3(e.XPos * Data.displayScale, e.YPos * Data.displayScale);
     }
 
     public void MoveTo(Vector2Int position, Data.Direction facing)

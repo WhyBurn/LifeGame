@@ -6,15 +6,23 @@ public class MoveStatement : Statement
 {
     private string[] possibleTags;
     private string[] possibleDirections;
-    private string tag;
-    private string direction;
+    private int tag;
+    private int direction;
 
     public MoveStatement(string[] tags, string[] directions)
     {
         possibleTags = tags;
         possibleDirections = directions;
-        tag = tags[0];
-        direction = directions[0];
+        tag = 0;
+        direction = 0;
+    }
+
+    public override GameObject[] GetCodeLineObjects()
+    {
+        GameObject[] moveObject = new GameObject[] { GameObject.Instantiate(Resources.Load<GameObject>("Move")) };
+        moveObject[0].GetComponent<MoveHandler>().SetupDirectionDropdown(possibleDirections, direction, SetDirection);
+        moveObject[0].GetComponent<MoveHandler>().SetupTagDropdown(possibleTags, tag, SetTag);
+        return (moveObject);
     }
 
     public override Statement GetCopy()
@@ -24,6 +32,24 @@ public class MoveStatement : Statement
 
     public override void Run()
     {
-        GameControllerObject.GetGCO().MoveEntity(tag, direction);
+        GameControllerObject.GetGCO().MoveEntity(possibleTags[tag], possibleDirections[direction]);
+    }
+
+    public void SetDirection(int index)
+    {
+        if(index < 0 || index >= possibleDirections.Length)
+        {
+            return;
+        }
+        direction = index;
+    }
+
+    public void SetTag(int index)
+    {
+        if (index < 0 || index >= possibleTags.Length)
+        {
+            return;
+        }
+        tag = index;
     }
 }
