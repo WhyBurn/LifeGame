@@ -11,6 +11,7 @@ public class DisplayHandler : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        models = new List<GameObject>();
         GameControllerObject.GetGCO().SetDisplayerReference(this);
     }
 

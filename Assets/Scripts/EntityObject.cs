@@ -9,7 +9,7 @@ public class EntityObject : MonoBehaviour
 
     public void Update()
     {
-        gameObject.transform.position = Vector3.Lerp(transform.position, targetPosition, 1);
+        gameObject.transform.position = Vector3.Lerp(transform.position, targetPosition, 0.1f);
     }
 
     public void SetEntity(GameEntity e)
@@ -20,7 +20,7 @@ public class EntityObject : MonoBehaviour
 
     public void MoveTo(Vector2Int position, Data.Direction facing)
     {
-        gameObject.transform.rotation = Quaternion.Euler(0, 0, ((int)facing) * 90);
+        gameObject.transform.rotation = Quaternion.Euler(0, 0, ((int)facing) * -90);
         targetPosition = new Vector3(position.x * Data.displayScale, position.y * Data.displayScale);
     }
 }

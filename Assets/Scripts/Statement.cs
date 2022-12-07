@@ -5,4 +5,5 @@ using UnityEngine;
 public abstract class Statement
 {
     public abstract Statement GetCopy();
+    public abstract void Run();
 }
